@@ -5,7 +5,7 @@
 	"description": "Add in a panel to save/load settings preset for your workspace",
 	"version": "0.0.1",
 	"author": "Tony",
-	"publisher": "legend-master",
+	"publisher": "legendmaster",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Legend-Master/vscode-settings-presets"
