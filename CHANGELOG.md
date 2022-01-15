@@ -1,9 +1,4 @@
-# Change Log
-
-All notable changes to the "settings-presets" extension will be documented in this file.
-
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
-## [Unreleased]
+## Version 0.0.1 (2020.1.15)
 
 - Initial release
+
