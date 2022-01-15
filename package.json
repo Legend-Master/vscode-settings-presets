@@ -10,9 +10,42 @@
 		"Other"
 	],
 	"activationEvents": [
-        "onView:settings-presets"
+        "onView:settings-presets",
+		"*"
 	],
 	"contributes": {
+		"configuration": [
+			{
+				"id": "settingsPresets",
+				"title": "Settings Preset",
+				"properties": {
+					"settingsPresets.settings": {
+						"type": "object"
+					}
+				}
+			}
+		],
+		"commands": [
+			{
+				"command": "settingsPresets.addPreset",
+				"title": "Add Settings Preset",
+				"shortTitle": "Add Preset",
+				"icon": {
+					"dark": "media/add_dark.svg",
+					"light": "media/add_light.svg"
+				}
+			},
+			{
+				"command": "settingsPresets.delectPreset",
+				"title": "Remove Settings Preset",
+				"shortTitle": "Remove Preset"
+			},
+			{
+				"command": "settingsPresets.applyPreset",
+				"title": "Apply Settings Preset",
+				"shortTitle": "Apply Preset"
+			}
+		],
 		"viewsContainers": {
 			"activitybar": [
 				{
@@ -26,8 +59,23 @@
 			"settings-presets": [
 				{
 					"id": "settingsPresets",
-					"name": "SP",
-					"icon": "media/icon.svg"
+					"name": "Settings Presets"
+				}
+			]
+		},
+		"menus": {
+			"view/title": [
+				{
+					"command": "settingsPresets.addPreset",
+					"group": "navigation"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "settingsPresets.applyPreset"
+				},
+				{
+					"command": "settingsPresets.delectPreset"
 				}
 			]
 		}
