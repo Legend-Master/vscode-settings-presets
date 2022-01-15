@@ -21,7 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.window.registerTreeDataProvider(VIEW_ID, windowProvider))
 
 	context.subscriptions.push(
-		vscode.commands.registerCommand('settingsPresets.applyPreset', (settingsItem: Settings) => {
+		vscode.commands.registerCommand('settingsPresets.applyPreset', async (settingsItem: Settings) => {
 			function updateSettings(configs: vscode.WorkspaceConfiguration, settings: any, field: string) {
 				for (const configName in settings) {
 					let newField = field + (field !== '' ? '.' : '') + configName
@@ -33,6 +33,11 @@ export function activate(context: vscode.ExtensionContext) {
 				}
 			}
 			updateSettings(vscode.workspace.getConfiguration(), presets[settingsItem.label], '')
+			const openSettings = 'Open Settings File'
+			const choice = await vscode.window.showInformationMessage('Preset: ' + settingsItem.label + ' applied', openSettings)
+			if (choice === openSettings) {
+				vscode.commands.executeCommand('workbench.action.openWorkspaceSettingsFile')
+			}
 		})
 	)
 	context.subscriptions.push(
