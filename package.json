@@ -27,7 +27,7 @@
 				"id": "settingsPresets",
 				"title": "Settings Preset",
 				"properties": {
-					"settingsPresets.settings": {
+					"settingsPresets.presets": {
 						"type": "object"
 					}
 				}
