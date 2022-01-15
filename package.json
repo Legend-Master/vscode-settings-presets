@@ -1,12 +1,14 @@
 {
 	"name": "settings-presets",
-	"icon": "media/icon.png",
+	"icon": "images/icon.png",
 	"displayName": "Settings Presets",
 	"description": "Add in a panel to save/load settings preset for your workspace",
 	"version": "0.0.1",
-	"publisher": "Tony",
+	"author": "Tony",
+	"publisher": "legend-master",
 	"repository": {
-		"url": "https://github.com/Legend-Master/vscode-settings-presets.git"
+		"type": "git",
+		"url": "https://github.com/Legend-Master/vscode-settings-presets"
 	},
 	"license": "MIT",
 	"engines": {
@@ -37,8 +39,8 @@
 				"title": "Add Settings Preset",
 				"shortTitle": "Add Preset",
 				"icon": {
-					"dark": "media/add_dark.svg",
-					"light": "media/add_light.svg"
+					"dark": "images/add_dark.svg",
+					"light": "images/add_light.svg"
 				}
 			},
 			{
@@ -57,7 +59,7 @@
 				{
 					"id": "settingsPresets",
 					"title": "Settings Presets",
-					"icon": "media/settings.svg"
+					"icon": "images/settings.svg"
 				}
 			]
 		},
