@@ -7,9 +7,3 @@ A vscode extension for appling settings presets to the workspace.
 Add in a panel to save/load settings preset for your workspace
 
 ![preview](https://raw.githubusercontent.com/legend-master/vscode-settings-presets/main/images/preview.gif)
-
-## Release Notes
-
-### 0.0.1
-
-First release.
