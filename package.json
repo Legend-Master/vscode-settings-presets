@@ -1,8 +1,14 @@
 {
 	"name": "settings-presets",
+	"icon": "media/icon.png",
 	"displayName": "Settings Presets",
-	"description": "",
+	"description": "Add in a panel to save/load settings preset for your workspace",
 	"version": "0.0.1",
+	"publisher": "Tony",
+	"repository": {
+		"url": "https://github.com/Legend-Master/vscode-settings-presets.git"
+	},
+	"license": "MIT",
 	"engines": {
 		"vscode": "^1.63.0"
 	},
@@ -10,8 +16,8 @@
 		"Other"
 	],
 	"activationEvents": [
-        "onView:settings-presets",
-		"*"
+		"onCommand:settingsPresets.addPreset",
+        "onView:settingsPresets"
 	],
 	"contributes": {
 		"configuration": [
@@ -49,14 +55,14 @@
 		"viewsContainers": {
 			"activitybar": [
 				{
-					"id": "settings-presets",
+					"id": "settingsPresets",
 					"title": "Settings Presets",
-					"icon": "media/icon.svg"
+					"icon": "media/settings.svg"
 				}
 			]
 		},
 		"views": {
-			"settings-presets": [
+			"settingsPresets": [
 				{
 					"id": "settingsPresets",
 					"name": "Settings Presets"
@@ -67,7 +73,8 @@
 			"view/title": [
 				{
 					"command": "settingsPresets.addPreset",
-					"group": "navigation"
+					"group": "navigation",
+					"when": "activeViewlet == 'workbench.view.extension.settingsPresets'"
 				}
 			],
 			"view/item/context": [
