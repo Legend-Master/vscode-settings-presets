@@ -67,7 +67,8 @@
 			"settingsPresets": [
 				{
 					"id": "settingsPresets",
-					"name": "Settings Presets"
+					"name": "Settings Presets",
+					"when": "workspaceFolderCount > 0"
 				}
 			]
 		},
@@ -81,10 +82,12 @@
 			],
 			"view/item/context": [
 				{
-					"command": "settingsPresets.applyPreset"
+					"command": "settingsPresets.applyPreset",
+					"when": "activeViewlet == 'workbench.view.extension.settingsPresets'"
 				},
 				{
-					"command": "settingsPresets.delectPreset"
+					"command": "settingsPresets.delectPreset",
+					"when": "activeViewlet == 'workbench.view.extension.settingsPresets'"
 				}
 			]
 		}
