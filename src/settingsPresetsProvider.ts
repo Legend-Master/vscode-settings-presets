@@ -1,45 +1,43 @@
-import * as vscode from 'vscode'
-import { PRESETS_SETTINGS_NAME } from "./constants";
+import {
+	TreeDataProvider,
+	EventEmitter,
+	workspace,
+	TreeItemCollapsibleState,
+	TreeItem,
+} from 'vscode'
 
-export class settingsPresetsProvider implements vscode.TreeDataProvider<Settings> {
+import { PRESETS_SETTINGS_NAME } from './constants'
 
-	// onDidChangeTreeData?: vscode.Event<void | Settings | null | undefined> | undefined
-	private _onDidChangeTreeData = new vscode.EventEmitter<Settings | void>()
-	get onDidChangeTreeData(): vscode.Event<Settings | void> {
-        return this._onDidChangeTreeData.event;
-    }
+export class settingsPresetsProvider implements TreeDataProvider<Settings> {
+
+	private _onDidChangeTreeData = new EventEmitter<void>()
+	onDidChangeTreeData = this._onDidChangeTreeData.event
 
 	refresh(): void {
 		this._onDidChangeTreeData.fire()
 	}
 
-	getTreeItem(element: Settings): vscode.TreeItem {
+	getTreeItem(element: Settings): Settings {
 		return element
 	}
 
 	getChildren(): Promise<Settings[]> {
-		const settingsPresets: Settings[] = []
-		const config = vscode.workspace.getConfiguration()
-		const presets = config.get<any>(PRESETS_SETTINGS_NAME)
+		const settingsPresets = new Array<Settings>()
+		const config = workspace.getConfiguration()
+		const presets = config.get<object>(PRESETS_SETTINGS_NAME)
 		if (presets) {
-			for (const presetName in presets) {
-				settingsPresets.push(
-					new Settings(
-						presetName,
-						vscode.TreeItemCollapsibleState.None,
-						presets[presetName]
-					)
-				)
+			for (const [presetName, preset] of Object.entries(presets)) {
+				settingsPresets.push(new Settings(presetName, TreeItemCollapsibleState.None, preset))
 			}
 		}
 		return Promise.resolve(settingsPresets)
 	}
 }
 
-export class Settings extends vscode.TreeItem {
+export class Settings extends TreeItem {
 	constructor(
 		public label: string,
-		public collapsibleState?: vscode.TreeItemCollapsibleState,
+		public collapsibleState?: TreeItemCollapsibleState,
 		public settings?: any,
 	) {
 		super(label, collapsibleState)

@@ -44,9 +44,9 @@
 				}
 			},
 			{
-				"command": "settingsPresets.delectPreset",
-				"title": "Remove Settings Preset",
-				"shortTitle": "Remove Preset"
+				"command": "settingsPresets.deletePreset",
+				"title": "Delete Settings Preset",
+				"shortTitle": "Delete Preset"
 			},
 			{
 				"command": "settingsPresets.applyPreset",
@@ -86,7 +86,7 @@
 					"when": "activeViewlet == 'workbench.view.extension.settingsPresets'"
 				},
 				{
-					"command": "settingsPresets.delectPreset",
+					"command": "settingsPresets.deletePreset",
 					"when": "activeViewlet == 'workbench.view.extension.settingsPresets'"
 				}
 			]
@@ -99,7 +99,8 @@
 		"watch": "tsc -watch -p ./",
 		"pretest": "npm run compile && npm run lint",
 		"lint": "eslint src --ext ts",
-		"test": "node ./out/test/runTest.js"
+		"test": "node ./out/test/runTest.js",
+		"package": "vsce package"
 	},
 	"devDependencies": {
 		"@types/vscode": "^1.63.0",
