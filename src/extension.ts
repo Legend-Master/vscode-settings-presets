@@ -6,49 +6,67 @@ import {
 	ConfigurationTarget,
 } from 'vscode'
 
-import { settingsPresetsProvider, Settings } from './settingsPresetsProvider'
+import { SettingsPresetsProvider, Settings } from './SettingsPresetsProvider'
 import { PRESETS_SETTINGS_NAME, VIEW_ID } from './constants'
 
 export function activate(context: ExtensionContext) {
-	if (!workspace.workspaceFolders?.length) {
-		return
-	}
-
 	let config = workspace.getConfiguration()
 	let presets = { ...config.get<any>(PRESETS_SETTINGS_NAME) }
 
-	const windowProvider = new settingsPresetsProvider()
+	const presetsProvider = new SettingsPresetsProvider()
+	const presetsTree = window.createTreeView(VIEW_ID, { treeDataProvider: presetsProvider })
+	if (!workspace.workspaceFolders?.length) {
+		presetsTree.message = 'You need to open a folder or workspace first to add and apply presets'
+	}
+
 	workspace.onDidChangeConfiguration((e) => {
 		config = workspace.getConfiguration()
 		if (e.affectsConfiguration(PRESETS_SETTINGS_NAME)) {
-			windowProvider.refresh()
+			presetsProvider.refresh()
 			presets = { ...config.get<any>(PRESETS_SETTINGS_NAME) }
 		}
 	})
 
+	async function choosePreset(): Promise<string | undefined> {
+		const keys = Object.keys(presets)
+		if (keys.length === 0) {
+			window.showErrorMessage('You have not yet saved a preset')
+			return
+		}
+		const choice = await window.showQuickPick(keys)
+		if (choice !== undefined) {
+			return choice
+		}
+	}
+
 	context.subscriptions.push(
-		window.registerTreeDataProvider(VIEW_ID, windowProvider),
+		presetsTree,
 
 		commands.registerCommand('settingsPresets.addPreset', async function addPreset() {
 			const presetName = await window.showInputBox({
 				placeHolder: 'Preset name',
 				ignoreFocusOut: true,
-				validateInput: value => value ? null : 'Preset name required'
+				validateInput: value => /[\S]+/.test(value) ? null : 'Preset name can\'t be empty/space only'
 			})
 			if (!presetName) {
 				return
 			}
 			if (presetName in presets) {
 				const rename = "Rename"
+				const cancel = 'Cancel'
 				const choice = await window.showWarningMessage(
 					`Preset: ${presetName} already exists, do you want to replace it?`,
+					"Override",
 					rename,
-					"Cancel"
+					cancel
 				)
-				if (choice === rename) {
-					addPreset()
+				switch (choice) {
+					case rename:
+						addPreset()
+					case cancel:
+					case undefined:
+						return
 				}
-				return
 			}
 			const settingsToSave: any = {}
 			for (const key in config) {
@@ -74,8 +92,11 @@ export function activate(context: ExtensionContext) {
 			}
 		}),
 
-		commands.registerCommand('settingsPresets.applyPreset', async (settingsItem: Settings) => {
-			const presetName = settingsItem.label
+		commands.registerCommand('settingsPresets.applyPreset', async (settingsItem?: Settings) => {
+			const presetName = settingsItem?.label || await choosePreset()
+			if (presetName === undefined) {
+				return
+			}
 
 			function updateSettings(settings: object, field: string[] = []) {
 				for (const [configName, setting] of Object.entries(settings)) {
@@ -95,9 +116,25 @@ export function activate(context: ExtensionContext) {
 			}
 		}),
 
-		commands.registerCommand('settingsPresets.deletePreset', (settingsItem: Settings) => {
-			delete presets[settingsItem.label]
-			config.update(PRESETS_SETTINGS_NAME, presets, ConfigurationTarget.Global)
+		commands.registerCommand('settingsPresets.deletePreset', async (settingsItem: Settings) => {
+			const presetName = settingsItem?.label || await choosePreset()
+			if (presetName === undefined) {
+				return
+			}
+
+			const yes = 'Delete'
+			const choice = await window.showWarningMessage(
+				'',
+				{
+					modal: true,
+					detail: `Are you sure you want to delete ${presetName}?`
+				},
+				yes,
+			)
+			if (choice === yes) {
+				delete presets[presetName]
+				config.update(PRESETS_SETTINGS_NAME, presets, ConfigurationTarget.Global)
+			}
 		})
 	)
 }

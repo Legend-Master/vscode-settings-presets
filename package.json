@@ -19,6 +19,8 @@
 	],
 	"activationEvents": [
 		"onCommand:settingsPresets.addPreset",
+		"onCommand:settingsPresets.applyPreset",
+		"onCommand:settingsPresets.deletePreset",
         "onView:settingsPresets"
 	],
 	"contributes": {
@@ -28,7 +30,13 @@
 				"title": "Settings Preset",
 				"properties": {
 					"settingsPresets.presets": {
-						"type": "object"
+						"type": "object",
+						"patternProperties": {
+							"[\\S]+": {
+								"$ref": "vscode://schemas/settings/user"
+							}
+						},
+						"additionalProperties": false
 					}
 				}
 			}
@@ -38,20 +46,19 @@
 				"command": "settingsPresets.addPreset",
 				"title": "Add Settings Preset",
 				"shortTitle": "Add Preset",
-				"icon": {
-					"dark": "images/add_dark.svg",
-					"light": "images/add_light.svg"
-				}
-			},
-			{
-				"command": "settingsPresets.deletePreset",
-				"title": "Delete Settings Preset",
-				"shortTitle": "Delete Preset"
+				"icon": "$(diff-added)"
 			},
 			{
 				"command": "settingsPresets.applyPreset",
 				"title": "Apply Settings Preset",
-				"shortTitle": "Apply Preset"
+				"shortTitle": "Apply Preset",
+				"icon": "$(check)"
+			},
+			{
+				"command": "settingsPresets.deletePreset",
+				"title": "Delete Settings Preset",
+				"shortTitle": "Delete Preset",
+				"icon": "$(trash)"
 			}
 		],
 		"viewsContainers": {
@@ -67,8 +74,7 @@
 			"settingsPresets": [
 				{
 					"id": "settingsPresets",
-					"name": "Settings Presets",
-					"when": "workspaceFolderCount > 0"
+					"name": "Settings Presets"
 				}
 			]
 		},
@@ -77,22 +83,37 @@
 				{
 					"command": "settingsPresets.addPreset",
 					"group": "navigation",
-					"when": "activeViewlet == 'workbench.view.extension.settingsPresets'"
+					"when": "view == settingsPresets && workbenchState != empty"
 				}
 			],
 			"view/item/context": [
 				{
 					"command": "settingsPresets.applyPreset",
-					"when": "activeViewlet == 'workbench.view.extension.settingsPresets'"
+					"when": "view == settingsPresets && workbenchState != empty",
+					"group": "inline"
 				},
 				{
 					"command": "settingsPresets.deletePreset",
-					"when": "activeViewlet == 'workbench.view.extension.settingsPresets'"
+					"when": "view == settingsPresets",
+					"group": "inline"
 				}
 			]
-		}
+		},
+		"viewsWelcome": [
+			{
+				"view": "settingsPresets",
+				"contents": "You have not yet saved a preset\n[Add Preset](command:settingsPresets.addPreset)",
+				"when": "workbenchState != empty"
+			},
+			{
+				"view": "settingsPresets",
+				"contents": "You need to open a folder or workspace first\n[Open Folder](command:workbench.action.files.openFolder)",
+				"when": "workbenchState == empty"
+			}
+		]
 	},
 	"main": "./out/extension.js",
+	"browser": "./out/extension.js",
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",

@@ -8,7 +8,7 @@ import {
 
 import { PRESETS_SETTINGS_NAME } from './constants'
 
-export class settingsPresetsProvider implements TreeDataProvider<Settings> {
+export class SettingsPresetsProvider implements TreeDataProvider<Settings> {
 
 	private _onDidChangeTreeData = new EventEmitter<void>()
 	onDidChangeTreeData = this._onDidChangeTreeData.event
@@ -21,7 +21,7 @@ export class settingsPresetsProvider implements TreeDataProvider<Settings> {
 		return element
 	}
 
-	getChildren(): Promise<Settings[]> {
+	getChildren(): Settings[] {
 		const settingsPresets = new Array<Settings>()
 		const config = workspace.getConfiguration()
 		const presets = config.get<object>(PRESETS_SETTINGS_NAME)
@@ -30,7 +30,7 @@ export class settingsPresetsProvider implements TreeDataProvider<Settings> {
 				settingsPresets.push(new Settings(presetName, TreeItemCollapsibleState.None, preset))
 			}
 		}
-		return Promise.resolve(settingsPresets)
+		return settingsPresets
 	}
 }
 
