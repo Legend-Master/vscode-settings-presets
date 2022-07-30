@@ -19,14 +19,6 @@ export function activate(context: ExtensionContext) {
 		presetsTree.message = 'You need to open a folder or workspace first to add and apply presets'
 	}
 
-	workspace.onDidChangeConfiguration((e) => {
-		config = workspace.getConfiguration()
-		if (e.affectsConfiguration(PRESETS_SETTINGS_NAME)) {
-			presetsProvider.refresh()
-			presets = { ...config.get<any>(PRESETS_SETTINGS_NAME) }
-		}
-	})
-
 	async function choosePreset(): Promise<string | undefined> {
 		const keys = Object.keys(presets)
 		if (keys.length === 0) {
@@ -41,6 +33,14 @@ export function activate(context: ExtensionContext) {
 
 	context.subscriptions.push(
 		presetsTree,
+
+		workspace.onDidChangeConfiguration((e) => {
+			config = workspace.getConfiguration()
+			if (e.affectsConfiguration(PRESETS_SETTINGS_NAME)) {
+				presetsProvider.refresh()
+				presets = { ...config.get<any>(PRESETS_SETTINGS_NAME) }
+			}
+		}),
 
 		commands.registerCommand('settingsPresets.addPreset', async function addPreset() {
 			const presetName = await window.showInputBox({
