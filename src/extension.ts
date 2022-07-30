@@ -68,13 +68,35 @@ export function activate(context: ExtensionContext) {
 						return
 				}
 			}
+
 			const settingsToSave: any = {}
+			// Gather settings by dotted format for matching schema
+			// If we find anything from the deeper field (also recorded by the deeper field)
+			// return true or we'll assume it as the deepest one already and record it
+			// Language settings are already formated and inspect [language].setting will return no workspaceValue
+			function gatherSettings(settings: object, field: string): boolean {
+				let validPath = false
+				for (const key in settings) {
+					const newField = `${field}.${key}`
+					const workspaceValue: any = config.inspect(newField)?.workspaceValue
+					if (typeof workspaceValue === 'object' && !Array.isArray(workspaceValue)) {
+						if (gatherSettings(workspaceValue, newField)) {
+							validPath = true
+						} else {
+							settingsToSave[newField] = workspaceValue
+						}
+					} else if (workspaceValue !== undefined) {
+						settingsToSave[newField] = workspaceValue
+						validPath = true
+					}
+				}
+				return validPath
+			}
 			for (const key in config) {
 				if (key === 'settingsPresets') {
 					continue
 				}
-				const settings = config.inspect(key)
-				const workspaceValue: any = settings?.workspaceValue
+				const workspaceValue: any = config.inspect(key)?.workspaceValue
 				if (workspaceValue === undefined) {
 					continue
 				}
@@ -82,8 +104,11 @@ export function activate(context: ExtensionContext) {
 				if ((key === 'launch' || key === 'tasks') && Object.keys(workspaceValue).length === 0) {
 					continue
 				}
-				settingsToSave[key] = workspaceValue
+				if (!(typeof workspaceValue === 'object' && gatherSettings(workspaceValue, key))) {
+					settingsToSave[key] = workspaceValue
+				}
 			}
+
 			if (Object.keys(settingsToSave).length === 0) {
 				window.showErrorMessage('No workspace setting available')
 			} else {
@@ -101,7 +126,7 @@ export function activate(context: ExtensionContext) {
 			function updateSettings(settings: object, field: string[] = []) {
 				for (const [configName, setting] of Object.entries(settings)) {
 					const newField = [...field, configName]
-					if (typeof setting === 'object') {
+					if (typeof setting === 'object' && !Array.isArray(setting)) {
 						updateSettings(setting, newField)
 					}
 					config.update(newField.join('.'), setting, ConfigurationTarget.Workspace)
