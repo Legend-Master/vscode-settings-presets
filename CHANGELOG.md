@@ -20,4 +20,8 @@
 - Add plain command call support for apply and delete
 - Add json schema for the settings
 - Save settings in dotted fromat to match the schema
-- Add browser support
+
+
+## Version 0.1.1 (2022.7.30)
+
+- Add browser/web support
