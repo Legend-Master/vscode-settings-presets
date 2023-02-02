@@ -6,7 +6,7 @@ import {
 	ConfigurationTarget,
 } from 'vscode'
 
-import { SettingsPresetsProvider, Settings } from './SettingsPresetsProvider'
+import { SettingsPresetsProvider, Preset } from './settingsPresetsProvider'
 import { PRESETS_SETTINGS_NAME, VIEW_ID } from './constants'
 
 export function activate(context: ExtensionContext) {
@@ -16,7 +16,7 @@ export function activate(context: ExtensionContext) {
 	const presetsProvider = new SettingsPresetsProvider()
 	const presetsTree = window.createTreeView(VIEW_ID, { treeDataProvider: presetsProvider })
 	if (!workspace.workspaceFolders?.length) {
-		presetsTree.message = 'You need to open a folder or workspace first to add and apply presets'
+		presetsTree.message = 'You need to open a folder or workspace first to add or apply presets'
 	}
 
 	async function choosePreset(): Promise<string | undefined> {
@@ -117,8 +117,8 @@ export function activate(context: ExtensionContext) {
 			}
 		}),
 
-		commands.registerCommand('settingsPresets.applyPreset', async (settingsItem?: Settings) => {
-			const presetName = settingsItem?.label || await choosePreset()
+		commands.registerCommand('settingsPresets.applyPreset', async (preset?: Preset) => {
+			const presetName = preset?.name || await choosePreset()
 			if (presetName === undefined) {
 				return
 			}
@@ -141,8 +141,8 @@ export function activate(context: ExtensionContext) {
 			}
 		}),
 
-		commands.registerCommand('settingsPresets.deletePreset', async (settingsItem: Settings) => {
-			const presetName = settingsItem?.label || await choosePreset()
+		commands.registerCommand('settingsPresets.deletePreset', async (preset?: Preset) => {
+			const presetName = preset?.name || await choosePreset()
 			if (presetName === undefined) {
 				return
 			}

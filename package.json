@@ -27,7 +27,7 @@
 		"configuration": [
 			{
 				"id": "settingsPresets",
-				"title": "Settings Preset",
+				"title": "Settings Presets",
 				"properties": {
 					"settingsPresets.presets": {
 						"type": "object",
