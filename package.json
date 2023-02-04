@@ -17,12 +17,6 @@
 	"categories": [
 		"Other"
 	],
-	"activationEvents": [
-		"onCommand:settingsPresets.addPreset",
-		"onCommand:settingsPresets.applyPreset",
-		"onCommand:settingsPresets.deletePreset",
-		"onView:settingsPresets"
-	],
 	"contributes": {
 		"configuration": [
 			{
