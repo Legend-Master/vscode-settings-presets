@@ -1,3 +1,9 @@
+## Version 0.1.2 (2023.12.20)
+
+- Bump dependencies
+- Migrate from Webpack to Esbuild
+
+
 ## Version 0.1.1 (2022.7.30)
 
 - Add browser/web support
