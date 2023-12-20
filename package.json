@@ -111,9 +111,9 @@
 	"scripts": {
 		"vscode:prepublish": "npm run compile && npm run compile-web",
 		"compile": "tsc -p ./",
-		"compile-web": "esbuild ./src/extension.ts --bundle --minify --sourcemap --external:vscode --outdir=./out/web",
+		"compile-web": "esbuild ./src/extension.ts --bundle --minify --sourcemap --external:vscode --format=cjs --outdir=./out/web",
 		"watch": "tsc -watch -p ./",
-		"watch-web": "esbuild ./src/extension.ts --bundle --watch --sourcemap --external:vscode --outdir=./out/web",
+		"watch-web": "esbuild ./src/extension.ts --bundle --watch --sourcemap --external:vscode --format=cjs --outdir=./out/web",
 		"package": "vsce package"
 	},
 	"devDependencies": {
