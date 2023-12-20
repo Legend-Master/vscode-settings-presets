@@ -1,5 +1,10 @@
 ## Version 0.1.2 (2023.12.20)
 
+- Fix not working on the web due to miss configured esbuild target
+
+
+## Version 0.1.2 (2023.12.20)
+
 - Bump dependencies
 - Migrate from Webpack to Esbuild
 

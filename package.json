@@ -3,7 +3,7 @@
 	"icon": "images/icon.png",
 	"displayName": "Settings Presets",
 	"description": "Add in a panel to save/load settings preset for your workspace",
-	"version": "0.1.2",
+	"version": "0.1.3",
 	"author": "Tony",
 	"publisher": "legendmaster",
 	"repository": {
