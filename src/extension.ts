@@ -1,10 +1,4 @@
-import {
-	window,
-	workspace,
-	commands,
-	ExtensionContext,
-	ConfigurationTarget,
-} from 'vscode'
+import { window, workspace, commands, ExtensionContext, ConfigurationTarget } from 'vscode'
 
 import { SettingsPresetsProvider, Preset } from './settingsPresetsProvider'
 import { PRESETS_SETTINGS_NAME, VIEW_ID } from './constants'
@@ -46,17 +40,18 @@ export function activate(context: ExtensionContext) {
 			const presetName = await window.showInputBox({
 				placeHolder: 'Preset name',
 				ignoreFocusOut: true,
-				validateInput: value => /[\S]+/.test(value) ? null : 'Preset name can\'t be empty/space only'
+				validateInput: (value) =>
+					/[\S]+/.test(value) ? null : "Preset name can't be empty/space only",
 			})
 			if (!presetName) {
 				return
 			}
 			if (presetName in presets) {
-				const rename = "Rename"
+				const rename = 'Rename'
 				const cancel = 'Cancel'
 				const choice = await window.showWarningMessage(
 					`Preset: ${presetName} already exists, do you want to replace it?`,
-					"Override",
+					'Override',
 					rename,
 					cancel
 				)
@@ -118,7 +113,7 @@ export function activate(context: ExtensionContext) {
 		}),
 
 		commands.registerCommand('settingsPresets.applyPreset', async (preset?: Preset) => {
-			const presetName = preset?.name || await choosePreset()
+			const presetName = preset?.name || (await choosePreset())
 			if (presetName === undefined) {
 				return
 			}
@@ -135,14 +130,17 @@ export function activate(context: ExtensionContext) {
 			updateSettings(presets[presetName])
 
 			const openSettings = 'Open Settings File'
-			const choice = await window.showInformationMessage(`Preset: ${presetName} applied`, openSettings)
+			const choice = await window.showInformationMessage(
+				`Preset: ${presetName} applied`,
+				openSettings
+			)
 			if (choice === openSettings) {
 				commands.executeCommand('workbench.action.openWorkspaceSettingsFile')
 			}
 		}),
 
 		commands.registerCommand('settingsPresets.deletePreset', async (preset?: Preset) => {
-			const presetName = preset?.name || await choosePreset()
+			const presetName = preset?.name || (await choosePreset())
 			if (presetName === undefined) {
 				return
 			}
@@ -152,9 +150,9 @@ export function activate(context: ExtensionContext) {
 				'',
 				{
 					modal: true,
-					detail: `Are you sure you want to delete ${presetName}?`
+					detail: `Are you sure you want to delete ${presetName}?`,
 				},
-				yes,
+				yes
 			)
 			if (choice === yes) {
 				delete presets[presetName]
