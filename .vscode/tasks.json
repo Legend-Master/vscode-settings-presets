@@ -22,7 +22,7 @@
 			"group": "build",
 			"isBackground": true,
 			"problemMatcher": [
-				"$ts-webpack-watch"
+				"$esbuild-watch"
 			]
 		}
 	]
