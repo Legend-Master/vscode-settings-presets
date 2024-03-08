@@ -1,6 +1,6 @@
 # Settings Presets extension for Visual Studio Code
 
-A vscode extension for applying settings presets to the workspace.
+A vscode extension for applying settings presets to the workspace
 
 ## Features
 
