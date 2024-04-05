@@ -1,0 +1,10 @@
+.vscode/**
+test_workspace/**
+src/**
+
+**/*.map
+
+images/preview.gif
+.gitignore
+tsconfig.json
+note.md
