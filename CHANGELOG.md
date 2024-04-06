@@ -1,4 +1,11 @@
-## Version 0.1.2 (2023.12.20)
+## Version 0.1.4 (2024.4.6)
+
+- New logo
+- Improve read me
+- Avoid unused files in the release bundle
+
+
+## Version 0.1.3 (2023.12.20)
 
 - Fix not working on the web due to miss configured esbuild target
 
